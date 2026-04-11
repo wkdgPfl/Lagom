@@ -17,7 +17,10 @@ public class User {
     private Long userId;
 
     @Column(nullable = false, unique = true)
-    private String email;
+    private String kakaoId; // email 대신 카카오 고유 ID 저장
+
+    // @Column(nullable = false, unique = true)
+    // private String email;
 
     @Column(nullable = false)
     private String nickname;
