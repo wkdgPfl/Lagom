@@ -29,6 +29,7 @@ public class AuthService {
         // 4. DB에서 카카오 ID로 유저 조회
         //    없으면 자동 회원가입, 있으면 그냥 로그인
         User user = userRepository.findByKakaoId(kakaoId)
+                // 없으면 자동 회원가입
                 .orElseGet(() -> userRepository.save(
                         User.builder()
                                 .kakaoId(kakaoId)

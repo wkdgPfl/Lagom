@@ -16,20 +16,25 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    // 카카오 고유 ID로 유저 식별 (이메일 대신)
     @Column(nullable = false, unique = true)
-    private String kakaoId; // email 대신 카카오 고유 ID 저장
+    private String kakaoId;
 
-    // @Column(nullable = false, unique = true)
-    // private String email;
-
+    // 카카오에서 받은 닉네임, 수정 가능
     @Column(nullable = false)
     private String nickname;
 
+    // 생성 후 수정 불가
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
+    }
+
+    // 닉네임 수정 메서드 (setter 대신 의미있는 메서드명 사용)
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
     }
 }

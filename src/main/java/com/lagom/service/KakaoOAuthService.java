@@ -18,6 +18,9 @@ public class KakaoOAuthService {
     @Value("${kakao.redirect-uri}")
     private String redirectUri;
 
+    @Value("${kakao.admin-key}")
+    private String adminKey;
+
     // 프론트에서 받은 인가코드로 카카오 액세스토큰 발급
     public String getAccessToken(String code) {
         return WebClient.create()
@@ -50,6 +53,21 @@ public class KakaoOAuthService {
                 .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
                 .bodyToMono(KakaoUserInfo.class) // JSON 응답을 KakaoUserInfo 객체로 변환
+                .block();
+    }
+
+    // 카카오 연결 끊기 (회원 탈퇴 시 호출)
+    // 카카오 연결 끊기 - Admin 키 사용
+    public void unlink(String kakaoId) {
+        WebClient.create()
+                .post()
+                .uri("https://kapi.kakao.com/v1/user/unlink")
+                .header("Authorization", "KakaoAK " + adminKey)  // clientId → adminKey
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .body(BodyInserters.fromFormData("target_id_type", "user_id")
+                        .with("target_id", kakaoId))
+                .retrieve()
+                .bodyToMono(java.util.Map.class)
                 .block();
     }
 }
