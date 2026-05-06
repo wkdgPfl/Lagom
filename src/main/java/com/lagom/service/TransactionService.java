@@ -4,6 +4,7 @@ import com.lagom.domain.Account;
 import com.lagom.domain.Transaction;
 import com.lagom.dto.request.DepositRequest;
 import com.lagom.dto.response.TransactionResponse;
+import com.lagom.global.TransactionType;
 import com.lagom.repository.AccountRepository;
 import com.lagom.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
@@ -46,9 +47,12 @@ public class TransactionService {
     public TransactionResponse withdraw(Long accountId) {
 
         List<Transaction> list =
-                transactionRepository.findByAccountAccountId(accountId);
+                transactionRepository.findByAccountAccountId(accountId)
+                        .stream()
+                        .filter(t -> t.getType() == TransactionType.HAPPY)
+                        .toList();
 
-        if (list.isEmpty()) throw new RuntimeException("empty");
+        if (list.isEmpty()) throw new RuntimeException("기록이 존재하지 않습니다.");
 
         Transaction t = list.get(new Random().nextInt(list.size()));
 
