@@ -32,6 +32,7 @@ public class SecurityConfig {
                         // 로그인 API는 토큰 없어도 접근 허용
                         .requestMatchers("/auth/**").permitAll()
 
+                        .requestMatchers("/expenses/**").permitAll()
                         .requestMatchers("/accounts/**").permitAll()
                         .requestMatchers("/transactions/**").permitAll()
                         .requestMatchers("/user/**").permitAll()
