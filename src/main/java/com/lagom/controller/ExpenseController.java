@@ -3,6 +3,7 @@ package com.lagom.controller;
 import com.lagom.dto.request.ExpenseCreateRequest;
 import com.lagom.dto.response.ExpenseResponse;
 import com.lagom.dto.response.MonthlyCalendarResponse;
+import com.lagom.dto.response.ReevaluateResponse;
 import com.lagom.service.ExpenseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -81,5 +82,10 @@ public class ExpenseController {
             @RequestParam LocalDate date
     ) {
         return expenseService.getDaily(userId, date);
+    }
+
+    @GetMapping("/reevaluation")
+    public ReevaluateResponse getReevaluation(@RequestParam Long userId) {
+        return expenseService.getReevaluationList(userId);
     }
 }

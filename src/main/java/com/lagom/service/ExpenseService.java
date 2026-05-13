@@ -3,9 +3,7 @@ package com.lagom.service;
 import com.lagom.domain.Expense;
 import com.lagom.domain.User;
 import com.lagom.dto.request.ExpenseCreateRequest;
-import com.lagom.dto.response.CalendarDayResponse;
-import com.lagom.dto.response.ExpenseResponse;
-import com.lagom.dto.response.MonthlyCalendarResponse;
+import com.lagom.dto.response.*;
 import com.lagom.global.EmotionType;
 import com.lagom.global.ExpenseType;
 import com.lagom.repository.ExpenseRepository;
@@ -321,5 +319,32 @@ public class ExpenseService {
                 )
                 .map(ExpenseResponse::from)
                 .toList();
+    }
+
+    public ReevaluateResponse getReevaluationList(Long userId) {
+
+        List<Expense> list = expenseRepository.findByUserUserId(userId);
+
+        List<Expense> target = expenseRepository.findReevaluationTarget(userId);
+
+        return ReevaluateResponse.builder()
+                .count((long) target.size())
+                .items(
+                        target.stream()
+                                .map(e -> ReevaluateItemResponse.builder()
+                                        .expenseId(e.getExpenseId())
+                                        .type(e.getType().name())
+                                        .title(e.getTitle())
+                                        .category(e.getCategory().name())
+                                        .amount(e.getAmount())
+                                        .emotion(e.getEmotion().name())
+                                        .evaluation(e.getEvaluation())
+                                        .paymentAt(e.getPaymentAt())
+                                        .reevaluationAt(e.getReevaluationAt())
+                                        .build()
+                                )
+                                .toList()
+                )
+                .build();
     }
 }
