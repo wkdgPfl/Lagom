@@ -10,6 +10,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -21,29 +26,53 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // REST API는 CSRF 공격 위험 없으므로 비활성화
                 .csrf(csrf -> csrf.disable())
 
-                // JWT 사용하므로 서버에 세션 저장 안 함
+                // CORS 설정 적용
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
-                        // 로그인 API는 토큰 없어도 접근 허용
                         .requestMatchers("/auth/**").permitAll()
-
                         .requestMatchers("/expenses/**").permitAll()
                         .requestMatchers("/accounts/**").permitAll()
                         .requestMatchers("/transactions/**").permitAll()
                         .requestMatchers("/user/**").permitAll()
-                        // 나머지 API는 JWT 토큰 필수
                         .anyRequest().authenticated()
                 )
 
-                // UsernamePasswordAuthenticationFilter 이전에 JwtFilter 실행
                 .addFilterBefore(new JwtFilter(jwtProvider),
                         UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+
+        // 허용할 프론트 주소 (로컬 + 배포 주소)
+        config.setAllowedOrigins(List.of(
+                "http://localhost:3000",
+                "http://localhost:5173"  // Vite 사용 시
+        ));
+
+        // 허용할 HTTP 메서드
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+
+        // 허용할 헤더
+        config.setAllowedHeaders(List.of("*"));
+
+        // Authorization 헤더 노출
+        config.setExposedHeaders(List.of("Authorization"));
+
+        // 쿠키/인증 정보 허용
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 }
