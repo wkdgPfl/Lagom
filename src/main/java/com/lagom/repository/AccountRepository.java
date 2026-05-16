@@ -8,4 +8,7 @@ import java.util.List;
 
 public interface AccountRepository extends JpaRepository<Account, Long> {
     List<Account> findByUserUserId(Long userId);
+
+    // 완료된 통장 목록 조회
+    List<Account> findByUserUserIdAndIsCompletedTrue(Long userId);
 }
