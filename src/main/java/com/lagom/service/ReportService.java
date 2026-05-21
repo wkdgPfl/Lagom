@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -77,5 +78,15 @@ public class ReportService {
                 .emotionExpenseRatio(emotionExpenseRatio)
                 .emotionAvgEvaluation(emotionAvgEvaluation)
                 .build();
+    }
+
+    // 데이터가 존재하는 연월 목록 반환
+    public List<String> getAvailableMonths(Long userId) {
+        return expenseRepository.findByUserUserId(userId)
+                .stream()
+                .map(e -> e.getPaymentAt().format(DateTimeFormatter.ofPattern("yyyy-MM")))
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
     }
 }
