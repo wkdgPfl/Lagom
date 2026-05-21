@@ -3,6 +3,7 @@ package com.lagom.service;
 import com.lagom.domain.Account;
 import com.lagom.domain.Transaction;
 import com.lagom.domain.User;
+import com.lagom.dto.request.AccountUpdateRequest;
 import com.lagom.dto.response.AccountDetailResponse;
 import com.lagom.dto.response.AccountResponse;
 import com.lagom.dto.response.TransactionResponse;
@@ -45,7 +46,8 @@ public class AccountService {
     }
 
     public List<AccountResponse> getAccounts(Long userId) {
-        return accountRepository.findByUserUserId(userId)
+        return accountRepository
+                .findByUserUserIdAndIsCompletedFalse(userId)
                 .stream()
                 .map(AccountResponse::from)
                 .toList();
@@ -80,5 +82,38 @@ public class AccountService {
 
     public void deposit(Account account, Long amount) {
         account.deposit(amount);
+    }
+
+    public AccountResponse update(
+            Long accountId,
+            AccountUpdateRequest request
+    ) {
+
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow();
+
+        account.update(
+                request.getName(),
+                request.getGoalType(),
+                request.getGoalAmount(),
+                request.getEndDate()
+        );
+
+        return AccountResponse.from(account);
+    }
+
+    public void delete(Long accountId) {
+
+        accountRepository.deleteById(accountId);
+    }
+
+    public AccountResponse complete(Long accountId) {
+
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow();
+
+        account.complete();
+
+        return AccountResponse.from(account);
     }
 }

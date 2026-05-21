@@ -58,4 +58,8 @@ public class TransactionService {
 
         return TransactionResponse.from(t);
     }
+
+    public void delete(Long transactionId) {
+        transactionRepository.deleteById(transactionId);
+    }
 }
