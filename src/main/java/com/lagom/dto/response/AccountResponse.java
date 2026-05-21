@@ -21,13 +21,15 @@ public class AccountResponse {
     private Long goalAmount;
     private LocalDate endDate;
 
+    private Boolean isCompleted;
+
     public static AccountResponse from(Account account) {
         return AccountResponse.builder()
                 .accountId(account.getAccountId())
                 .name(account.getName())
                 .balance(account.getBalance())
                 .goalType(account.getGoalType())
-
+                .isCompleted(account.getIsCompleted())
                 .goalAmount(
                         account.getGoalType() == GoalType.AMOUNT
                                 ? account.getGoalAmount()

@@ -1,6 +1,7 @@
 package com.lagom.controller;
 
 import com.lagom.domain.Account;
+import com.lagom.dto.request.AccountUpdateRequest;
 import com.lagom.dto.response.AccountDetailResponse;
 import com.lagom.dto.response.AccountResponse;
 import com.lagom.global.GoalType;
@@ -36,5 +37,30 @@ public class AccountController {
     @GetMapping("/{id}")
     public AccountDetailResponse detail(@PathVariable Long id) {
         return accountService.getAccountDetail(id);
+    }
+
+    @PutMapping("/{id}")
+    public AccountResponse update(
+            @PathVariable Long id,
+            @RequestBody AccountUpdateRequest request
+    ) {
+
+        return accountService.update(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(
+            @PathVariable Long id
+    ) {
+
+        accountService.delete(id);
+    }
+
+    @PatchMapping("/{id}/complete")
+    public AccountResponse complete(
+            @PathVariable Long id
+    ) {
+
+        return accountService.complete(id);
     }
 }

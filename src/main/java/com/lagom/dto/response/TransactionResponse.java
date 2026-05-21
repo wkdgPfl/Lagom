@@ -13,6 +13,7 @@ import java.util.Locale;
 @Getter
 @Builder
 public class TransactionResponse {
+    private Long transactionId;
 
     private String type;
     private Long amount;
@@ -34,6 +35,7 @@ public class TransactionResponse {
                 DateTimeFormatter.ofPattern("HH:mm:ss");
 
         return TransactionResponse.builder()
+                .transactionId(t.getTransactionId())
                 .date(t.getCreatedAt().format(dateFormatter))
                 .type(t.getType().name())
                 .nickname(t.getAccount().getUser().getNickname())

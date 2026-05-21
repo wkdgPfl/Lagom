@@ -60,4 +60,21 @@ public class Account {
     public void deposit(Long amount) {
         this.balance += amount;
     }
+
+    public void update(
+            String name,
+            GoalType goalType,
+            Long goalAmount,
+            LocalDate endDate
+    ) {
+
+        this.name = name;
+        this.goalType = goalType;
+        this.goalAmount = goalAmount;
+        this.endDate = endDate;
+    }
+
+    public void complete() {
+        this.isCompleted = true;
+    }
 }

@@ -23,4 +23,9 @@ public class TransactionController {
     public TransactionResponse withdraw(@RequestParam Long accountId) {
         return transactionService.withdraw(accountId);
     }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        transactionService.delete(id);
+    }
 }
