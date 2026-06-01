@@ -59,14 +59,21 @@ public class KakaoOAuthService {
     // 카카오 연결 끊기 (회원 탈퇴 시 호출)
     // 카카오 연결 끊기 - Admin 키 사용
     public void unlink(String kakaoId) {
+        System.out.println("=== unlink kakaoId: " + kakaoId + " ===");
         WebClient.create()
                 .post()
                 .uri("https://kapi.kakao.com/v1/user/unlink")
-                .header("Authorization", "KakaoAK " + adminKey)  // clientId → adminKey
+                .header("Authorization", "KakaoAK " + adminKey)
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .body(BodyInserters.fromFormData("target_id_type", "user_id")
                         .with("target_id", kakaoId))
                 .retrieve()
+                .onStatus(status -> status.is4xxClientError(), response ->
+                        response.bodyToMono(String.class)
+                                .doOnNext(body -> System.out.println("=== unlink 에러: " + body))
+                                .flatMap(body -> reactor.core.publisher.Mono.error(
+                                        new RuntimeException("unlink 실패: " + body)))
+                )
                 .bodyToMono(java.util.Map.class)
                 .block();
     }
