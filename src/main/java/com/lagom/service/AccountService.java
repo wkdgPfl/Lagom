@@ -76,6 +76,7 @@ public class AccountService {
                 .balance(account.getBalance())
                 .happyTotal(happy)
                 .recoverTotal(recover)
+                .createdAt(account.getCreatedAt())
                 .transactions(txList)
                 .build();
     }
