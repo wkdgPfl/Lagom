@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
@@ -21,6 +22,7 @@ public class AccountResponse {
     private Long goalAmount;
     private LocalDate endDate;
 
+    private LocalDateTime createdAt;
     private Boolean isCompleted;
 
     public static AccountResponse from(Account account) {
@@ -29,6 +31,7 @@ public class AccountResponse {
                 .name(account.getName())
                 .balance(account.getBalance())
                 .goalType(account.getGoalType())
+                .createdAt(account.getCreatedAt())
                 .isCompleted(account.getIsCompleted())
                 .goalAmount(
                         account.getGoalType() == GoalType.AMOUNT
