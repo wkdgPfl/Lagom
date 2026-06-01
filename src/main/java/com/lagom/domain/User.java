@@ -3,6 +3,8 @@ package com.lagom.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -27,6 +29,13 @@ public class User {
     // 생성 후 수정 불가
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    // 유저 삭제 시 연관 데이터 함께 삭제
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Expense> expenses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Account> accounts = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
