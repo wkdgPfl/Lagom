@@ -1,0 +1,49 @@
+package com.lagom.dto.response;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.lagom.domain.Account;
+import com.lagom.global.GoalType;
+import lombok.Builder;
+import lombok.Getter;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Getter
+@Builder
+public class AccountResponse {
+
+    private Long accountId;
+    private String name;
+    private Long balance;
+    private GoalType goalType;
+
+    private Long goalAmount;
+    private LocalDate endDate;
+
+    private LocalDateTime createdAt;
+    private Boolean isCompleted;
+
+    public static AccountResponse from(Account account) {
+        return AccountResponse.builder()
+                .accountId(account.getAccountId())
+                .name(account.getName())
+                .balance(account.getBalance())
+                .goalType(account.getGoalType())
+                .createdAt(account.getCreatedAt())
+                .isCompleted(account.getIsCompleted())
+                .goalAmount(
+                        account.getGoalType() == GoalType.AMOUNT
+                                ? account.getGoalAmount()
+                                : null
+                )
+                .endDate(
+                        account.getGoalType() == GoalType.PERIOD
+                                ? account.getEndDate()
+                                : null
+                )
+
+                .build();
+    }
+}

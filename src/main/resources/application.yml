@@ -6,7 +6,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
@@ -20,3 +20,4 @@ jwt:
 kakao:
   client-id: ${KAKAO_CLIENT_ID}
   redirect-uri: ${KAKAO_REDIRECT_URI}
+  admin-key: ${KAKAO_ADMIN_KEY}
