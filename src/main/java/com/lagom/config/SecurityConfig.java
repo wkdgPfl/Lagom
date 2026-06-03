@@ -56,7 +56,8 @@ public class SecurityConfig {
         // 허용할 프론트 주소 (로컬 + 배포 주소)
         config.setAllowedOrigins(List.of(
                 "http://localhost:3000",
-                "http://localhost:5173"  // Vite 사용 시
+                "http://localhost:5173",  // Vite 사용 시
+                "https://happeach.site"   // 프론트 배포 주소
         ));
 
         // 허용할 HTTP 메서드
