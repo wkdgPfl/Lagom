@@ -16,6 +16,12 @@ public class UserController {
 
     private final UserService userService;
 
+    // 내 정보 조회
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getMe(@AuthenticationPrincipal Long userId) {
+        return ResponseEntity.ok(userService.getMe(userId));
+    }
+
     // 닉네임 수정
     // JWT에서 꺼낸 userId를 @AuthenticationPrincipal로 주입받음
     @PatchMapping("/me/nickname")
