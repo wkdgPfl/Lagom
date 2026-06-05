@@ -17,6 +17,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final KakaoOAuthService kakaoOAuthService;
 
+    // 닉네임 조회
+    public UserResponse getMe(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다"));
+        return new UserResponse(user);
+    }
+
     // 닉네임 수정
     @Transactional
     public UserResponse updateNickname(Long userId, NicknameUpdateRequest request) {
