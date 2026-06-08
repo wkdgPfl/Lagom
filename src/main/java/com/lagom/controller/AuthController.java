@@ -21,6 +21,6 @@ public class AuthController {
     @GetMapping("/kakao")
     public void kakaoLogin(@RequestParam String code, HttpServletResponse response) throws IOException {
         LoginResponse loginResponse = authService.kakaoLogin(code);
-        response.sendRedirect("https://happeach.site?token=" + loginResponse.getAccessToken());
+        response.sendRedirect("https://happeach.site/login/callback?token=" + loginResponse.getAccessToken());
     }
 }
