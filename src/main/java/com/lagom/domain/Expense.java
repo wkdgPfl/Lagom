@@ -119,6 +119,24 @@ public class Expense {
 
         this.repeatStartDate = repeatStartDate;
         this.repeatEndDate = repeatEndDate;
+
+        if (emotion == null || evaluation == null) {
+            this.reevaluationAt = null;
+        } else {
+
+            boolean negativeEmotion =
+                    emotion == EmotionType.DEPRESSED
+                            || emotion == EmotionType.STRESSED
+                            || emotion == EmotionType.IMPULSIVE;
+
+            boolean highEvaluation =
+                    evaluation >= 3;
+
+            this.reevaluationAt =
+                    (negativeEmotion && highEvaluation)
+                            ? paymentAt.plusDays(3)
+                            : null;
+        }
     }
 
     public void reevaluate(Integer evaluation) {
