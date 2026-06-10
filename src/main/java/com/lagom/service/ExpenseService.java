@@ -81,7 +81,7 @@ public class ExpenseService {
                                 emotion,
                                 evaluation
                         )
-                                ? LocalDateTime.now().plusDays(3)
+                                ? request.getPaymentAt().plusDays(3)
                                 : null
                 )
 
